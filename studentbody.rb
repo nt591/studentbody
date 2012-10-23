@@ -83,7 +83,22 @@ class StudentBody < Sinatra::Base
     
     end      
 
+    def self.list_all
+    	# call the list_all method on the object from the student class
+    	# it should list all the first_name and last_name of students in order of ID
+    	# first we call the database
+    	# create objects for each person
+    	# save to an array of objects
 
+    	result = @db.execute("SELECT first_name, last_name FROM students")
+    	result.each do |result|
+    		student = Student.new
+    		student.first_name = result["first_name"]
+    		student.last_name = result["last_name"]
+    		puts "#{student.first_name} #{student.last_name}"
+    	end
+
+    end
   
   end
 

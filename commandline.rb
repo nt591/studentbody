@@ -33,7 +33,7 @@ def search(lastname)
 end
 
 def list
-	puts StudentBody::Student.all
+	StudentBody::Student.list_all
 end	
 
 
@@ -48,7 +48,7 @@ until selection == "exit"
 		search(argument)
 
 	when "list"	
-		puts list
+		list
 	when "help"
 
 	end
