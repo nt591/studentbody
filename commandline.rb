@@ -20,16 +20,13 @@ require_relative 'studentbody'
 puts "hello, welcome to studentbody command line!"
 
 def search(lastname)
-	student = StudentBody::Student.findbylast("#{lastname}")
-
-	# StudentBody::Student.attributes.each do |attribute|
-	# 	puts student.send attribute
-	#  end
-	
-	 StudentBody::Student.attributes.each do |attribute|
-		puts "#{attribute}: #{student.send(attribute)}"
+	student = StudentBody::Student.findbylast(lastname)
+	# if the attribute is githubfeed or twitterfeed, skip that output
+	 StudentBody::Student.attributes.each do |attribute| 
+		unless attribute == :twitterfeed || attribute == :githubfeed
+			puts "#{attribute}: #{student.send(attribute)}" 
+		end
 	 end
-
 end
 
 def list
@@ -44,13 +41,19 @@ until selection == "exit"
 	selection = gets.downcase.chomp
 	case selection
 	when /search\s.*/
-		argument = selection.split[1]
-		search(argument)
+		begin
+			argument = selection.split[1]
+			search(argument)
+		rescue
+			puts "That last name does not exist. IDIOT."
+		end
 
 	when "list"	
 		list
 	when "help"
-
+		puts "You can type 'list' to see all names, or you can search by last name (search X) for an individual's information."
+	else
+		puts "I don't understand. Please use list or help, or search by last name."
 	end
 
 end

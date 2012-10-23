@@ -39,8 +39,8 @@ class StudentBody < Sinatra::Base
     def self.findbylast(lastname)
       student = Student.new
       @db.results_as_hash = true
-      result = @db.execute("SELECT * FROM students WHERE last_name = '#{lastname.capitalize}'")[0]
-      # puts result
+      lastname = lastname.capitalize
+      result = @db.execute("SELECT * FROM students WHERE last_name = ?", lastname)[0]
 
       @@attributes.each do |attribute|
         student.send("#{attribute}=", result[attribute.to_s])
