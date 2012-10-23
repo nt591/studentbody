@@ -2,6 +2,8 @@ require 'sqlite3'
 require 'sinatra'
 require 'fileutils'
 
+aa = "Aaron"
+
 class StudentBody < Sinatra::Base 
 
   get '/' do
@@ -29,11 +31,28 @@ class StudentBody < Sinatra::Base
 
     @@attributes = keys.compact!
     
+    
     @@attributes.each do |attribute|
       attr_accessor attribute
     end
 
-    
+    def self.findbylast(lastname)
+      student = Student.new
+      @db.results_as_hash = true
+      result = @db.execute("SELECT * FROM students WHERE last_name = '#{lastname.capitalize}'")[0]
+      # puts result
+
+      @@attributes.each do |attribute|
+        student.send("#{attribute}=", result[attribute.to_s])
+      end
+        student
+
+    end
+
+    def self.attributes
+      @@attributes
+    end
+
     def self.find(fullname)
       first_name, last_name = fullname.split("-",2)
       student = Student.new
@@ -58,9 +77,10 @@ class StudentBody < Sinatra::Base
         student.last_name = result["last_name"]
         student.image_url = result["image_url"]
         student.page_link = result["page_link"]
-        allstudents << student
+        allstudents << student 
       end    
       allstudents
+    
     end      
 
 
@@ -69,4 +89,6 @@ class StudentBody < Sinatra::Base
 
 end
 
-StudentBody.run!
+
+# puts StudentBody::Student.attributes
+#StudentBody.run!
